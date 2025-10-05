@@ -38,20 +38,27 @@ internal class Program
 
         string playerchoice = Console.ReadLine();
         int firstchoice = roll.Next(1, 5);
-        while (firstchoice == 3)
+        while (firstchoice == 3 && enemyenergy! < 35)
         {
             firstchoice = roll.Next(1, 5);
         }
+
+        // choice 1 - player
         if (playerchoice == "1")
         {
             playerenergy -= 5;
             int chance = roll.Next(1, 10);
             if (firstchoice == 4)
             {
-                int newchance = chance - 3;
-                if (newchance < 6)
+                if (chance < 6)
                 {
-                    Console.WriteLine("Your attack has failed.");
+                    int damage = roll.Next(1, 10);
+                    Console.WriteLine("Your attack was successful. You dealt " + damage + " damage");
+                    enemyhealth -= damage;
+                }
+                else
+                {
+                    Console.WriteLine("Your attack has failed!");
                 }
             }
             if (chance < 9)
@@ -60,8 +67,31 @@ internal class Program
                 Console.WriteLine("Your attack was successful. You dealt " + damage + " damage");
                 enemyhealth -= damage;
             }
+            else
+            {
+                Console.WriteLine("Your attack has failed!");
+            }
         }
 
+        // choice 2 - player
+        if (playerchoice == "2")
+        {
+            playerenergy -= 10;
+            int chance = roll.Next(1, 10);
+            if (firstchoice == 4)
+            {
+                if (chance < 3)
+                {
+                    Console.WriteLine("Your attack has failed.");
+                }
+            }
+            if (chance < 6)
+            {
+                int damage = roll.Next(1, 10);
+                Console.WriteLine("Your attack was successful. You dealt " + damage + " damage");
+                enemyhealth -= damage;
+            }
 
+        }
     }
 }
