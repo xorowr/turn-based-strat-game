@@ -93,5 +93,27 @@ internal class Program
             }
 
         }
+                if (playerchoice == "3")
+        {
+            if (playerenergy !< 50)
+            {
+                int newenergy = 50 - playerenergy;
+                if (newenergy < 35)
+                {
+                    playerenergy += 16;
+                    bool hitincrease = true;
+                }
+                else
+                {
+                    playerenergy += newenergy;
+                    bool hitincrease = true;
+                }
+            }
+            else
+            {
+                Console.WriteLine("You don't need to recharge.");
+            }
+        }
     }
+
 }
