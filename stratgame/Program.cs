@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 
 internal class Program
 {
@@ -10,6 +10,14 @@ internal class Program
         Console.WriteLine("You have five actions you can pick from each turn. Some of these consume energy. You recharge 4 points of energy each turn. I'll explain what they are properly when we get there.");
         Console.WriteLine("Good luck out there. Or bad luck... Depends which side I'm on today.");
         Console.WriteLine();
+
+        //constants for moves for clarity
+        const string attack = "1";
+        const string specialattack = "2";
+        const string recharge = "3";
+        const string dodge = "4";
+        const string heal = "5";
+
 
         // stats
         Console.WriteLine("Before I forget, here are the current stats of you and the enemy.");
@@ -28,7 +36,9 @@ internal class Program
         Console.WriteLine();
 
         Random roll = new Random();
-        bool playeraction = false;
+
+
+        // while loop will begin here when i get to that point
         Console.WriteLine("Time to make your move! Enter the number that corresponds to the move you would like to do.");
         Console.WriteLine("[1] Attack - Standard strike on the enemy. - 1-10 damage and 80% chance to hit - Costs 5 energy");
         Console.WriteLine("[2] Special Attack - A special attack - 5-20 damage and 50% chance to hit - Costs 10 energy.");
@@ -44,7 +54,7 @@ internal class Program
         }
 
         // choice 1 - player
-        if (playerchoice == "1")
+        if (playerchoice == attack)
         {
             playerenergy -= 5;
             int chance = roll.Next(1, 10);
@@ -55,10 +65,12 @@ internal class Program
                     int damage = roll.Next(1, 10);
                     Console.WriteLine("Your attack was successful. You dealt " + damage + " damage");
                     enemyhealth -= damage;
+                    playerenergy += 4;
                 }
                 else
                 {
                     Console.WriteLine("Your attack has failed!");
+                    playerenergy += 4;
                 }
             }
             if (chance < 9)
@@ -66,15 +78,17 @@ internal class Program
                 int damage = roll.Next(1, 10);
                 Console.WriteLine("Your attack was successful. You dealt " + damage + " damage");
                 enemyhealth -= damage;
+                playerenergy += 4;
             }
             else
             {
                 Console.WriteLine("Your attack has failed!");
+                playerenergy += 4;
             }
         }
 
         // choice 2 - player
-        if (playerchoice == "2")
+        if (playerchoice == specialattack)
         {
             playerenergy -= 10;
             int chance = roll.Next(1, 10);
@@ -83,6 +97,7 @@ internal class Program
                 if (chance < 3)
                 {
                     Console.WriteLine("Your attack has failed.");
+                    playerenergy += 4;
                 }
             }
             if (chance < 6)
@@ -90,8 +105,63 @@ internal class Program
                 int damage = roll.Next(1, 10);
                 Console.WriteLine("Your attack was successful. You dealt " + damage + " damage");
                 enemyhealth -= damage;
+                playerenergy += 4;
+            }
+
+        }
+        // choice 3 - player
+        if (playerchoice == recharge)
+        {
+            if (playerenergy! < 50)
+            {
+                int newenergy = 50 - playerenergy;
+                if (newenergy < 35)
+                {
+                    playerenergy += 16;
+                    bool hitincrease = true;
+                    Console.WriteLine("You have recharged 16 energy, which is the max energy you can recharge.");
+                }
+                else
+                {
+                    playerenergy += newenergy;
+                    bool hitincrease = true;
+                    Console.WriteLine("You have recharged" + newenergy + "energy");
+                }
+            }
+            else
+            {
+                Console.WriteLine("You don't need to recharge.");
+            }
+        }
+
+        // choice 4 - player
+        if (playerchoice == dodge)
+        {
+            bool hitdecrease = true;
+            Console.WriteLine("You are attempting to dodge. You will find out if its successful on the enemy's turn.");
+            if (playerenergy < 49)
+            {
+                playerenergy += 2;
+                Console.WriteLine("You have recharged 2 energy");
+            }
+            else
+            {
+                Console.WriteLine("You do not need to recharge");
+            }
+        }
+
+        // choice 5 - player - half the energy to find max heal, heal energy until 50 is reached, allow second action
+        if (playerchoice == heal)
+        {
+            if (playerhealth < 99)
+            {
+                playerenergy -= 10;
+
+                
+                
             }
 
         }
     }
+
 }
