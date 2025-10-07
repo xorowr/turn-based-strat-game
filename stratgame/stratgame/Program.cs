@@ -95,7 +95,7 @@ internal class Program
         // continues choice selection until a turn has been successfully made
         while (pturnsuccess == false)
         {
-            // choice 1 - player
+            // choice 1 (attack) - player
             if (playerchoice == attack && playerenergy > 4)
             {
                 playerenergy -= 5;
@@ -142,7 +142,7 @@ internal class Program
 
 
 
-            // choice 2 - player
+            // choice 2 (special attack) - player
             if (playerchoice == specialattack && playerenergy > energycheck)
             {
                 playerenergy -= 10;
@@ -189,7 +189,7 @@ internal class Program
             }
 
 
-            // choice 3 - player
+            // choice 3 (recharge) - player
             if (playerchoice == recharge)
             {
                 if (playerenergy < maxenergy)
@@ -221,7 +221,7 @@ internal class Program
 
 
 
-            // choice 4 - player
+            // choice 4 (dodge) - player
             if (playerchoice == dodge)
             {
                 bool hitdecrease = true;
@@ -241,7 +241,7 @@ internal class Program
 
 
 
-            // choice 5 - player
+            // choice 5 (heal) - player
             if (playerchoice == heal)
             {
                 if (playerhealth < healththresh && playerenergy > energycheck)
