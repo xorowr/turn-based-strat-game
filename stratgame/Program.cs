@@ -296,15 +296,15 @@ internal class Program
             // turn summary
             Console.WriteLine("After your turn, here are the stats of you and the enemy:");
             HealthEnergyStats(playerhealth, playerenergy, enemyhealth, enemyenergy);
-            eturnsuccess = false;
             Console.WriteLine();
+            eturnsuccess = false;
 
             // rerolls if it lands on a recharge when a recharge is not needed
             while (enemychoice == recharge && enemyenergy > 34)
             {
                 enemyroll = roll.Next(1, 5);
+                enemychoice = Convert.ToString(enemyroll);
             }
-
 
 
             while (eturnsuccess == false)
@@ -429,6 +429,7 @@ internal class Program
                     {
                         Console.WriteLine("The enemy doesn't need to recharge.");
                         enemyroll = roll.Next(1, 5);
+                        enemychoice = Convert.ToString(enemyroll);
                         pturnsuccess = false;
                     }
                 }
@@ -476,6 +477,7 @@ internal class Program
                     {
                         Console.WriteLine("The enemy cannot or does not need to heal. They can pick to do a new action.");
                         enemyroll = roll.Next(1, 5);
+                        enemychoice = Convert.ToString(enemyroll);
                         eturnsuccess = false;
 
                     }
