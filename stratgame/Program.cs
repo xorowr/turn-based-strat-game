@@ -291,6 +291,16 @@ internal class Program
 
                 }
 
+                // errors out with any invalid input
+                if (playerchoice != attack && playerchoice != specialattack && playerchoice != recharge && playerchoice != dodge && playerchoice != heal)
+                {
+                    Console.WriteLine("Your input was invalid. Please pick a new input.");
+                    choices();
+                    playerchoice = Console.ReadLine();
+                    pturnsuccess = false;
+                }
+
+
             }
 
             // turn summary
