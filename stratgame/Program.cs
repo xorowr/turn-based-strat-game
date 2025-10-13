@@ -340,7 +340,7 @@ internal class Program
                     {
                         if (chance < passdodgeattack)
                         {
-                            int damage = roll.Next(1, 10);
+                            int damage = roll.Next(minattackdamage, maxattackdamage);
                             Console.WriteLine("The enemy's attack was successful. They dealt " + damage + " damage");
                             playerhealth -= damage;
                             enemyenergy += turnrecharge;
@@ -355,7 +355,7 @@ internal class Program
                     }
                     if (chance < passattack && playerchoice != dodge)
                     {
-                        int damage = roll.Next(1, 10);
+                        int damage = roll.Next(minattackdamage, maxattackdamage);
                         Console.WriteLine("The enemy's attack was successful. They dealt " + damage + " damage");
                         playerhealth -= damage;
                         enemyenergy += turnrecharge;
@@ -363,7 +363,7 @@ internal class Program
                     }
                     else if (chance <= 10 && playerchoice == recharge)
                     {
-                        int damage = roll.Next(1, 10);
+                        int damage = roll.Next(minattackdamage, maxattackdamage);
                         Console.WriteLine("The enemy's attack was successful. They dealt " + damage + " damage");
                         enemyhealth -= damage;
                         playerenergy += turnrecharge;
@@ -386,7 +386,7 @@ internal class Program
                     {
                         if (chance < passspecialdodgeattack)
                         {
-                            int damage = roll.Next(5, 20);
+                            int damage = roll.Next(minspecialattackdamage, maxspecialattackdamage);
                             Console.WriteLine("The enemy's attack was successful. They dealt " + damage + " damage");
                             playerhealth -= damage;
                             enemyenergy += turnrecharge;
@@ -401,7 +401,7 @@ internal class Program
                     }
                     if (chance < passspecialattack && playerchoice != dodge)
                     {
-                        int damage = roll.Next(5, 20);
+                        int damage = roll.Next(minspecialattackdamage, maxspecialattackdamage);
                         Console.WriteLine("The enemy's attack was successful. They dealt " + damage + " damage");
                         playerhealth -= damage;
                         enemyenergy += turnrecharge;
@@ -409,7 +409,7 @@ internal class Program
                     }
                     else if (chance <= 7 && playerchoice == recharge)
                     {
-                        int damage = roll.Next(5, 20);
+                        int damage = roll.Next(minspecialattackdamage, maxspecialattackdamage);
                         Console.WriteLine("The enemy's attack was successful. They dealt " + damage + " damage");
                         playerhealth -= damage;
                         enemyenergy += turnrecharge;
@@ -524,3 +524,4 @@ internal class Program
         }
     }
 }
+
