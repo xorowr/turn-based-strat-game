@@ -1,3 +1,4 @@
+
 using System.Diagnostics;
 
 internal class Program
@@ -52,6 +53,9 @@ internal class Program
         const int energycheck = 9;
         const int maxhealth = 100;
         const int maxenergy = 50;
+        const int maxrecharge = 16;
+        const int attackenergy = 5;
+        const int othermoveenergy = 10;
 
 
         // variables
@@ -85,24 +89,48 @@ internal class Program
         Random roll = new Random();
 
 
-        // while loop will begin here when i get to that point
-        choices();
-        string playerchoice = Console.ReadLine();
-
-        int enemyroll = roll.Next(1, 5);
-        string enemychoice = Convert.ToString(enemyroll);
-
-        // continues choice selection until a turn has been successfully made
-        while (pturnsuccess == false)
+        while (playerhealth > 0 || enemyhealth > 0)
         {
-            // choice 1 (attack) - player
-            if (playerchoice == attack && playerenergy > 4)
+            choices();
+            string playerchoice = Console.ReadLine();
+
+            int enemyroll = roll.Next(1, 5);
+            string enemychoice = Convert.ToString(enemyroll);
+
+            // continues choice selection until a turn has been successfully made
+            while (pturnsuccess == false)
             {
-                playerenergy -= 5;
-                int chance = roll.Next(1, 10);
-                if (enemychoice == dodge)
+                // choice 1 (attack) - player
+                if (playerchoice == attack && playerenergy > 4)
                 {
-                    if (chance < pdodgeattack)
+                    playerenergy -= attackenergy;
+                    int chance = roll.Next(1, 10);
+                    if (enemychoice == dodge)
+                    {
+                        if (chance < pdodgeattack)
+                        {
+                            int damage = roll.Next(1, 10);
+                            Console.WriteLine("Your attack was successful. You dealt " + damage + " damage");
+                            enemyhealth -= damage;
+                            playerenergy += turnrecharge;
+                            pturnsuccess = true;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Your attack has failed! The enemy's dodge was successful.");
+                            playerenergy += turnrecharge;
+                            pturnsuccess = true;
+                        }
+                    }
+                    if (chance < pattack && enemychoice != dodge)
+                    {
+                        int damage = roll.Next(1, 10);
+                        Console.WriteLine("Your attack was successful. You dealt " + damage + " damage");
+                        enemyhealth -= damage;
+                        playerenergy += turnrecharge;
+                        pturnsuccess = true;
+                    }
+                    else if (chance <= 10 && enemychoice == recharge)
                     {
                         int damage = roll.Next(1, 10);
                         Console.WriteLine("Your attack was successful. You dealt " + damage + " damage");
@@ -117,39 +145,47 @@ internal class Program
                         pturnsuccess = true;
                     }
                 }
-                if (chance < pattack && enemychoice != dodge)
+                else if (playerchoice == attack && playerenergy < 5)
                 {
-                    int damage = roll.Next(1, 10);
-                    Console.WriteLine("Your attack was successful. You dealt " + damage + " damage");
-                    enemyhealth -= damage;
-                    playerenergy += turnrecharge;
-                    pturnsuccess = true;
+                    Console.WriteLine("You do not have enough energy for this move. Pick a new move");
+                    choices();
+                    playerchoice = Console.ReadLine();
+                    pturnsuccess = false;
                 }
-                else
+
+
+
+                // choice 2 (special attack) - player
+                if (playerchoice == specialattack && playerenergy > energycheck)
                 {
-                    Console.WriteLine("Your attack has failed!");
-                    playerenergy += turnrecharge;
-                    pturnsuccess = true;
-                }
-            }
-            else if (playerchoice == attack && playerenergy < 5)
-            {
-                Console.WriteLine("You do not have enough energy for this move. Pick a new move");
-                choices();
-                playerchoice = Console.ReadLine();
-                pturnsuccess = false;
-            }
-
-
-
-            // choice 2 (special attack) - player
-            if (playerchoice == specialattack && playerenergy > energycheck)
-            {
-                playerenergy -= 10;
-                int chance = roll.Next(1, 10);
-                if (enemychoice == dodge)
-                {
-                    if (chance < pspecdodgeattack)
+                    playerenergy -= othermoveenergy;
+                    int chance = roll.Next(1, 10);
+                    if (enemychoice == dodge)
+                    {
+                        if (chance < pspecdodgeattack)
+                        {
+                            int damage = roll.Next(1, 10);
+                            Console.WriteLine("Your attack was successful. You dealt " + damage + " damage");
+                            enemyhealth -= damage;
+                            playerenergy += turnrecharge;
+                            pturnsuccess = true;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Your attack has failed! The enemy's dodge was successful.");
+                            playerenergy += turnrecharge;
+                            pturnsuccess = true;
+                        }
+                    }
+                    if (chance < pspecattack && enemychoice != dodge)
+                    {
+                        int damage = roll.Next(1, 10);
+                        Console.WriteLine("Your attack was successful. You dealt " + damage + " damage");
+                        enemyhealth -= damage;
+                        playerenergy += turnrecharge;
+                        pturnsuccess = true;
+                    }
+                    else if (chance <= 7 && enemychoice == recharge)
                     {
                         int damage = roll.Next(1, 10);
                         Console.WriteLine("Your attack was successful. You dealt " + damage + " damage");
@@ -159,167 +195,301 @@ internal class Program
                     }
                     else
                     {
-                        Console.WriteLine("Your attack has failed!");
+                        Console.WriteLine("Your attack has failed.");
                         playerenergy += turnrecharge;
                         pturnsuccess = true;
                     }
+
                 }
-                if (chance < pspecattack && enemychoice != dodge)
+                else if (playerchoice == specialattack && playerenergy <= energycheck)
                 {
-                    int damage = roll.Next(1, 10);
-                    Console.WriteLine("Your attack was successful. You dealt " + damage + " damage");
-                    enemyhealth -= damage;
-                    playerenergy += turnrecharge;
-                    pturnsuccess = true;
-                }
-                else
-                {
-                    Console.WriteLine("Your attack has failed.");
-                    playerenergy += turnrecharge;
-                    pturnsuccess = true;
+                    Console.WriteLine("You do not have enough energy for this move. Pick a new move");
+                    choices();
+                    playerchoice = Console.ReadLine();
+                    pturnsuccess = false;
                 }
 
-            }
-            else if (playerchoice == specialattack && playerenergy <= energycheck)
-            {
-                Console.WriteLine("You do not have enough energy for this move. Pick a new move");
-                choices();
-                playerchoice = Console.ReadLine();
-                pturnsuccess = false;
-            }
 
-
-            // choice 3 (recharge) - player
-            if (playerchoice == recharge)
-            {
-                if (playerenergy < maxenergy)
+                // choice 3 (recharge) - player
+                if (playerchoice == recharge)
                 {
-                    int newenergy = maxenergy - playerenergy;
-                    if (playerenergy < 35)
+                    if (playerenergy < maxenergy)
                     {
-                        playerenergy += 16;
-                        bool hitincrease = true;
-                        Console.WriteLine("You have recharged 16 energy, which is the max energy you can recharge.");
+                        int newenergy = maxenergy - playerenergy;
+                        if (playerenergy < 35)
+                        {
+                            playerenergy += maxrecharge;
+                            bool hitincrease = true;
+                            Console.WriteLine("You have recharged 16 energy, which is the max energy you can recharge.");
+                            pturnsuccess = true;
+                        }
+                        else
+                        {
+                            playerenergy += newenergy;
+                            bool hitincrease = true;
+                            Console.WriteLine("You have recharged " + newenergy + " energy");
+                            pturnsuccess = true;
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("You don't need to recharge.");
+                        choices();
+                        playerchoice = Console.ReadLine();
+                        pturnsuccess = false;
+                    }
+                }
+
+
+
+                // choice 4 (dodge) - player
+                if (playerchoice == dodge)
+                {
+                    bool hitdecrease = true;
+                    Console.WriteLine("You are attempting to dodge. You will find out if its successful on the enemy's turn.");
+                    if (playerenergy < energythresh)
+                    {
+                        playerenergy += 2;
+                        Console.WriteLine("You have recharged 2 energy");
                         pturnsuccess = true;
                     }
                     else
                     {
-                        playerenergy += newenergy;
-                        bool hitincrease = true;
-                        Console.WriteLine("You have recharged " + newenergy + " energy");
+                        Console.WriteLine("You do not need to recharge");
                         pturnsuccess = true;
                     }
                 }
-                else
+
+
+
+                // choice 5 (heal) - player
+                if (playerchoice == heal)
                 {
-                    Console.WriteLine("You don't need to recharge.");
-                    choices();
-                    playerchoice = Console.ReadLine();
-                    pturnsuccess = false;
+                    if (playerhealth < healththresh && playerenergy > energycheck)
+                    {
+                        playerenergy -= othermoveenergy;
+                        int halfstored = playerenergy / 2;
+                        int healamount = maxhealth - playerhealth;
+                        playerhealth += healamount;
+                        int addenergy = halfstored - healamount;
+                        playerenergy = (playerenergy - halfstored) + addenergy;
+                        Console.WriteLine("You have healed " + healamount + " health");
+                        Console.WriteLine("You can now pick to do another move. It cannot be another heal");
+                        ChoicesNoHeal();
+                        playerchoice = Console.ReadLine();
+                        pturnsuccess = false;
+
+                    }
+                    else
+                    {
+                        Console.WriteLine("You either cannot or do not need to heal. You can pick to do a new action.");
+                        choices();
+                        playerchoice = Console.ReadLine();
+                        pturnsuccess = false;
+
+                    }
+
                 }
+
             }
 
+            // turn summary
+            Console.WriteLine("After your turn, here are the stats of you and the enemy:");
+            HealthEnergyStats(playerhealth, playerenergy, enemyhealth, enemyenergy);
+            eturnsuccess = false;
+            Console.WriteLine();
 
-
-            // choice 4 (dodge) - player
-            if (playerchoice == dodge)
+            // rerolls if it lands on a recharge when a recharge is not needed
+            while (enemychoice == recharge && enemyenergy > 34)
             {
-                bool hitdecrease = true;
-                Console.WriteLine("You are attempting to dodge. You will find out if its successful on the enemy's turn.");
-                if (playerenergy < energythresh)
-                {
-                    playerenergy += 2;
-                    Console.WriteLine("You have recharged 2 energy");
-                    pturnsuccess = true;
-                }
-                else
-                {
-                    Console.WriteLine("You do not need to recharge");
-                    pturnsuccess = true;
-                }
+                enemyroll = roll.Next(1, 5);
             }
 
 
 
-            // choice 5 (heal) - player
-            if (playerchoice == heal)
+            while (eturnsuccess == false)
             {
-                if (playerhealth < healththresh && playerenergy > energycheck)
+
+                // choice 1 - enemy
+                if (enemychoice == attack)
                 {
-                    playerenergy -= 10;
-                    int halfstored = playerenergy / 2;
-                    int healamount = maxhealth - playerhealth;
-                    playerhealth += healamount;
-                    int addenergy = halfstored - healamount;
-                    playerenergy = (playerenergy - halfstored) + addenergy;
-                    Console.WriteLine("You have healed " + healamount + " health");
-                    Console.WriteLine("You can now pick to do another move. It cannot be another heal");
-                    ChoicesNoHeal();
-                    playerchoice = Console.ReadLine();
-                    pturnsuccess = false;
+                    enemyenergy -= attackenergy;
+                    int chance = roll.Next(1, 10);
+                    if (playerchoice == dodge)
+                    {
+                        if (chance < pdodgeattack)
+                        {
+                            int damage = roll.Next(1, 10);
+                            Console.WriteLine("The enemy's attack was successful. They dealt " + damage + " damage");
+                            playerhealth -= damage;
+                            enemyenergy += turnrecharge;
+                            eturnsuccess = true;
+                        }
+                        else
+                        {
+                            Console.WriteLine("The enemy's attack has failed! Your dodge was succesful.");
+                            enemyenergy += turnrecharge;
+                            eturnsuccess = true;
+                        }
+                    }
+                    if (chance < pattack && playerchoice != dodge)
+                    {
+                        int damage = roll.Next(1, 10);
+                        Console.WriteLine("The enemy's attack was successful. They dealt " + damage + " damage");
+                        playerhealth -= damage;
+                        enemyenergy += turnrecharge;
+                        eturnsuccess = true;
+                    }
+                    else if (chance <= 10 && playerchoice == recharge)
+                    {
+                        int damage = roll.Next(1, 10);
+                        Console.WriteLine("The enemy's attack was successful. They dealt " + damage + " damage");
+                        enemyhealth -= damage;
+                        playerenergy += turnrecharge;
+                        eturnsuccess = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("The enemy's attack has failed!");
+                        enemyenergy += turnrecharge;
+                        eturnsuccess = true;
+                    }
+                }
+
+                // choice 2 - enemy
+                if (enemychoice == specialattack && enemyenergy > energycheck)
+                {
+                    enemyenergy -= othermoveenergy;
+                    int chance = roll.Next(1, 10);
+                    if (playerchoice == dodge)
+                    {
+                        if (chance < pspecdodgeattack)
+                        {
+                            int damage = roll.Next(1, 10);
+                            Console.WriteLine("The enemy's attack was successful. They dealt " + damage + " damage");
+                            playerhealth -= damage;
+                            enemyenergy += turnrecharge;
+                            eturnsuccess = true;
+                        }
+                        else
+                        {
+                            Console.WriteLine("The enemy's attack has failed! Your dodge was successful.");
+                            enemyenergy += turnrecharge;
+                            eturnsuccess = true;
+                        }
+                    }
+                    if (chance < pspecattack && playerchoice != dodge)
+                    {
+                        int damage = roll.Next(1, 10);
+                        Console.WriteLine("The enemy's attack was successful. They dealt " + damage + " damage");
+                        playerhealth -= damage;
+                        enemyenergy += turnrecharge;
+                        eturnsuccess = true;
+                    }
+                    else if (chance <= 7 && playerchoice == recharge)
+                    {
+                        int damage = roll.Next(1, 10);
+                        Console.WriteLine("The enemy's attack was successful. They dealt " + damage + " damage");
+                        playerhealth -= damage;
+                        enemyenergy += turnrecharge;
+                        eturnsuccess = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("The enemy's attack has failed.");
+                        enemyenergy += turnrecharge;
+                        eturnsuccess = true;
+                    }
 
                 }
-                else
+
+
+                // choice 3 - enemy
+                if (enemychoice == recharge)
                 {
-                    Console.WriteLine("You either cannot or do not need to heal. You can pick to do a new action.");
-                    choices();
-                    playerchoice = Console.ReadLine();
-                    pturnsuccess = false;
+                    if (enemyenergy < maxenergy)
+                    {
+                        int newenergy = maxenergy - enemyenergy;
+                        if (enemyenergy < 35)
+                        {
+                            enemyenergy += maxrecharge;
+                            bool hitincrease = true;
+                            Console.WriteLine("The enemy has recharged 16 energy, which is the max energy they can recharge.");
+                            pturnsuccess = true;
+                        }
+                        else
+                        {
+                            enemyenergy += newenergy;
+                            bool hitincrease = true;
+                            Console.WriteLine("The enemy has recharged " + newenergy + " energy");
+                            pturnsuccess = true;
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("The enemy doesn't need to recharge.");
+                        enemyroll = roll.Next(1, 5);
+                        pturnsuccess = false;
+                    }
+                }
+
+
+
+                // choice 4 = enemy
+                if (enemychoice == dodge)
+                {
+                    bool hitdecrease = true;
+                    Console.WriteLine("The enemy is attempting to dodge. They will find out if its successful on the player's turn.");
+                    if (enemyenergy < energythresh)
+                    {
+                        enemyenergy += 2;
+                        Console.WriteLine("The enemy has recharged 2 energy");
+                        eturnsuccess = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("The enemy does not need to recharge");
+                        eturnsuccess = true;
+                    }
+                }
+
+
+                // choice 5 - enemy
+                if (enemychoice == heal)
+                {
+                    if (enemyhealth < healththresh && enemyenergy > energycheck)
+                    {
+                        enemyenergy -= othermoveenergy;
+                        int halfstored = enemyenergy / 2;
+                        int healamount = maxhealth - enemyhealth;
+                        enemyhealth += healamount;
+                        int addenergy = halfstored - healamount;
+                        enemyenergy = (enemyenergy - halfstored) + addenergy;
+                        Console.WriteLine("You have healed " + healamount + " health");
+                        Console.WriteLine("You can now pick to do another move. It cannot be another heal");
+                        ChoicesNoHeal();
+                        playerchoice = Console.ReadLine();
+                        eturnsuccess = false;
+
+                    }
+                    else
+                    {
+                        Console.WriteLine("The enemy cannot or does not need to heal. They can pick to do a new action.");
+                        enemyroll = roll.Next(1, 5);
+                        eturnsuccess = false;
+
+                    }
 
                 }
+                // turn summary
+                Console.WriteLine("After the enemy's turn, here are the stats of you and the enemy:");
+                HealthEnergyStats(playerhealth, playerenergy, enemyhealth, enemyenergy);
+                Console.WriteLine();
+                pturnsuccess = false;
 
             }
+
         }
-
-        // turn summary
-        Console.WriteLine("After your turn, here are the stats of you and the enemy:");
-        HealthEnergyStats(playerhealth, playerenergy, enemyhealth, enemyenergy);
-        Console.WriteLine();
-
-        // rerolls if it lands on a recharge when a recharge is not needed
-        while (enemychoice == recharge && enemyenergy > 34)
-        {
-            enemyroll = roll.Next(1, 5);
-        }
-
-        // choice 1 - enemy
-        if (enemychoice == attack)
-        {
-            enemyenergy -= 5;
-            int chance = roll.Next(1, 10);
-            if (playerchoice == dodge)
-            {
-                if (chance < pdodgeattack)
-                {
-                    int damage = roll.Next(1, 10);
-                    Console.WriteLine("Your attack was successful. You dealt " + damage + " damage");
-                    playerhealth -= damage;
-                    enemyenergy += turnrecharge;
-                    eturnsuccess = true;
-                }
-                else
-                {
-                    Console.WriteLine("Your attack has failed!");
-                    enemyenergy += turnrecharge;
-                    eturnsuccess = true;
-                }
-            }
-            if (chance < pattack && playerchoice != dodge)
-            {
-                int damage = roll.Next(1, 10);
-                Console.WriteLine("Your attack was successful. You dealt " + damage + " damage");
-                playerhealth -= damage;
-                enemyenergy += turnrecharge;
-                eturnsuccess = true;
-            }
-            else
-            {
-                Console.WriteLine("Your attack has failed!");
-                enemyenergy += turnrecharge;
-                eturnsuccess = true;
-            }
-        }
-
-
+        Console.WriteLine("Game over!");
     }
 }
