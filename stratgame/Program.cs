@@ -44,15 +44,16 @@ internal class Program
         const string recharge = "3";
         const string dodge = "4";
         const string heal = "5";
+
         const int healththresh = 99;
         const int energythresh = 49;
-        const int pdodgeattack = 6;
-        const int pattack = 9;
+        const int passdodgeattack = 6;
+        const int passattack = 9;
         const int turnrecharge = 4;
-        const int pspecattack = 6;
-        const int pspecdodgeattack = 3;
-        const int prechargeattack = 10;
-        const int pchargespecattack = 7;
+        const int passspecialattack = 6;
+        const int passspecialdodgeattack = 3;
+        const int passrechargeattack = 10;
+        const int passrechargespecialattack = 7;
         const int energycheck = 9;
         const int maxhealth = 100;
         const int maxenergy = 50;
@@ -62,16 +63,20 @@ internal class Program
         const int minenergyneed = 4;
         const int maxenergyrecharge = 35;
         const int halfrecharge = 2;
+        const int minattackdamage = 1;
+        const int maxattackdamage = 10;
+        const int minspecialattackdamage = 5;
+        const int maxspecialattackdamage = 20;
+
 
 
         // variables
-        int playerhealth = 100;
-        int playerenergy = 50;
-        int enemyhealth = 100;
-        int enemyenergy = 50;
+        int playerhealth = maxhealth;
+        int playerenergy = maxenergy;
+        int enemyhealth = maxhealth;
+        int enemyenergy = maxenergy;
         bool pturnsuccess = false;
         bool eturnsuccess = false;
-
 
 
 
@@ -113,9 +118,9 @@ internal class Program
                     int chance = roll.Next(1, 10);
                     if (enemychoice == dodge)
                     {
-                        if (chance < pdodgeattack)
+                        if (chance < passdodgeattack)
                         {
-                            int damage = roll.Next(1, 10);
+                            int damage = roll.Next(minattackdamage, maxattackdamage);
                             Console.WriteLine("Your attack was successful. You dealt " + damage + " damage");
                             enemyhealth -= damage;
                             playerenergy += turnrecharge;
@@ -128,23 +133,23 @@ internal class Program
                             pturnsuccess = true;
                         }
                     }
-                    if (chance < pattack && enemychoice != dodge)
+                    if (chance < passattack && enemychoice != dodge)
                     {
-                        int damage = roll.Next(1, 10);
+                        int damage = roll.Next(minattackdamage, maxattackdamage);
                         Console.WriteLine("Your attack was successful. You dealt " + damage + " damage");
                         enemyhealth -= damage;
                         playerenergy += turnrecharge;
                         pturnsuccess = true;
                     }
-                    else if (chance <= prechargeattack && enemychoice == recharge)
+                    else if (chance <= passrechargeattack && enemychoice == recharge)
                     {
-                        int damage = roll.Next(1, 10);
+                        int damage = roll.Next(minattackdamage, maxattackdamage);
                         Console.WriteLine("Your attack was successful. You dealt " + damage + " damage");
                         enemyhealth -= damage;
                         playerenergy += turnrecharge;
                         pturnsuccess = true;
                     }
-                    else if (chance !<= prechargeattack && enemychoice == recharge)
+                    else if (chance !<= passrechargeattack && enemychoice == recharge)
                     {
                         Console.WriteLine("Your attack has failed!");
                         playerenergy += turnrecharge;
@@ -168,9 +173,9 @@ internal class Program
                     int chance = roll.Next(1, 10);
                     if (enemychoice == dodge)
                     {
-                        if (chance < pspecdodgeattack)
+                        if (chance < passspecialdodgeattack)
                         {
-                            int damage = roll.Next(1, 10);
+                            int damage = roll.Next(minspecialattackdamage, maxspecialattackdamage);
                             Console.WriteLine("Your attack was successful. You dealt " + damage + " damage");
                             enemyhealth -= damage;
                             playerenergy += turnrecharge;
@@ -183,23 +188,23 @@ internal class Program
                             pturnsuccess = true;
                         }
                     }
-                    if (chance < pspecattack && enemychoice != dodge)
+                    if (chance < passspecialattack && enemychoice != dodge)
                     {
-                        int damage = roll.Next(1, 10);
+                        int damage = roll.Next(minspecialattackdamage, maxspecialattackdamage);
                         Console.WriteLine("Your attack was successful. You dealt " + damage + " damage");
                         enemyhealth -= damage;
                         playerenergy += turnrecharge;
                         pturnsuccess = true;
                     }
-                    else if (chance <= pchargespecattack && enemychoice == recharge)
+                    else if (chance <= passrechargespecialattack && enemychoice == recharge)
                     {
-                        int damage = roll.Next(1, 10);
+                        int damage = roll.Next(minspecialattackdamage, maxspecialattackdamage);
                         Console.WriteLine("Your attack was successful. You dealt " + damage + " damage");
                         enemyhealth -= damage;
                         playerenergy += turnrecharge;
                         pturnsuccess = true;
                     }
-                    else if (chance !<= pchargespecattack && enemychoice == recharge)
+                    else if (chance !<= passrechargespecialattack && enemychoice == recharge)
                     {
                         Console.WriteLine("Your attack has failed.");
                         playerenergy += turnrecharge;
@@ -316,7 +321,7 @@ internal class Program
             eturnsuccess = false;
 
             // rerolls if it lands on a recharge when a recharge is not needed
-            while (enemychoice == recharge && enemyenergy > 34)
+            while (enemychoice == recharge && enemyenergy >= maxenergyrecharge)
             {
                 enemyroll = roll.Next(1, 5);
                 enemychoice = Convert.ToString(enemyroll);
@@ -333,7 +338,7 @@ internal class Program
                     int chance = roll.Next(1, 10);
                     if (playerchoice == dodge)
                     {
-                        if (chance < pdodgeattack)
+                        if (chance < passdodgeattack)
                         {
                             int damage = roll.Next(1, 10);
                             Console.WriteLine("The enemy's attack was successful. They dealt " + damage + " damage");
@@ -348,7 +353,7 @@ internal class Program
                             eturnsuccess = true;
                         }
                     }
-                    if (chance < pattack && playerchoice != dodge)
+                    if (chance < passattack && playerchoice != dodge)
                     {
                         int damage = roll.Next(1, 10);
                         Console.WriteLine("The enemy's attack was successful. They dealt " + damage + " damage");
@@ -379,9 +384,9 @@ internal class Program
                     int chance = roll.Next(1, 10);
                     if (playerchoice == dodge)
                     {
-                        if (chance < pspecdodgeattack)
+                        if (chance < passspecialdodgeattack)
                         {
-                            int damage = roll.Next(1, 10);
+                            int damage = roll.Next(5, 20);
                             Console.WriteLine("The enemy's attack was successful. They dealt " + damage + " damage");
                             playerhealth -= damage;
                             enemyenergy += turnrecharge;
@@ -394,9 +399,9 @@ internal class Program
                             eturnsuccess = true;
                         }
                     }
-                    if (chance < pspecattack && playerchoice != dodge)
+                    if (chance < passspecialattack && playerchoice != dodge)
                     {
-                        int damage = roll.Next(1, 10);
+                        int damage = roll.Next(5, 20);
                         Console.WriteLine("The enemy's attack was successful. They dealt " + damage + " damage");
                         playerhealth -= damage;
                         enemyenergy += turnrecharge;
@@ -404,7 +409,7 @@ internal class Program
                     }
                     else if (chance <= 7 && playerchoice == recharge)
                     {
-                        int damage = roll.Next(1, 10);
+                        int damage = roll.Next(5, 20);
                         Console.WriteLine("The enemy's attack was successful. They dealt " + damage + " damage");
                         playerhealth -= damage;
                         enemyenergy += turnrecharge;
