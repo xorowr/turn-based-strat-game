@@ -138,7 +138,7 @@ internal class Program
                         playerenergy += turnrecharge;
                         pturnsuccess = true;
                     }
-                    else
+                    else if (chance !<= 10 && enemychoice == recharge)
                     {
                         Console.WriteLine("Your attack has failed!");
                         playerenergy += turnrecharge;
@@ -193,7 +193,7 @@ internal class Program
                         playerenergy += turnrecharge;
                         pturnsuccess = true;
                     }
-                    else
+                    else if (chance !<= 7 && enemychoice == recharge)
                     {
                         Console.WriteLine("Your attack has failed.");
                         playerenergy += turnrecharge;
