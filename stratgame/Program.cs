@@ -89,7 +89,7 @@ internal class Program
         Random roll = new Random();
 
 
-        while (playerhealth > 0 || enemyhealth > 0)
+        while (playerhealth > 0 && enemyhealth !> 0 || playerhealth !> 0 && enemyhealth > 0)
         {
             choices();
             string playerchoice = Console.ReadLine();
