@@ -193,7 +193,7 @@ internal class Program
                         playerchoice = Console.ReadLine();
                         pturnsuccess = false;
 
-                    
+
                     }
                     playerenergy -= othermoveenergy;
                     int chance = roll.Next(1, 10);
@@ -228,6 +228,13 @@ internal class Program
                         break;
 
                     }
+                    else if (chance >= passspecialattack && enemychoice != dodge)
+                    {
+                        Console.WriteLine("Your attack has failed.");
+                        playerenergy += turnrecharge;
+                        pturnsuccess = true;
+                        break;
+                    }
                     else if (chance <= passrechargespecialattack && enemychoice == recharge)
                     {
                         int damage = roll.Next(minspecialattackdamage, maxspecialattackdamage);
@@ -253,30 +260,25 @@ internal class Program
                 // choice 3 (recharge) - player
                 if (playerchoice == recharge)
                 {
-                    if (playerenergy < maxenergy)
+                    if (playerenergy >= maxenergy)
                     {
-                        int newenergy = maxenergy - playerenergy;
-                        if (playerenergy < maxenergyrecharge)
-                        {
-                            playerenergy += maxrecharge;
-                            Console.WriteLine("You have recharged 16 energy, which is the max energy you can recharge.");
-                            pturnsuccess = true;
-
-                        }
-                        else
-                        {
-                            playerenergy += newenergy;
-                            Console.WriteLine("You have recharged " + newenergy + " energy");
-                            pturnsuccess = true;
-
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("You don't need to recharge.");
+                        Console.WriteLine("You do not need to recharge. Please pick a new option.");
                         choices();
                         playerchoice = Console.ReadLine();
                         pturnsuccess = false;
+                    }
+                    int newenergy = maxenergy - playerenergy;
+                    if (playerenergy < maxenergyrecharge)
+                    {
+                        playerenergy += maxrecharge;
+                        Console.WriteLine("You recharged 16 energy, which is the max energy you can recharge.");
+                        pturnsuccess = true;
+                    }
+                    else
+                    {
+                        playerenergy += newenergy;
+                        Console.WriteLine("You have recharged " + newenergy + "energy");
+                        pturnsuccess = true;
                     }
                 }
 
@@ -381,12 +383,14 @@ internal class Program
                             playerhealth -= damage;
                             enemyenergy += turnrecharge;
                             eturnsuccess = true;
+                            break;
                         }
                         else
                         {
                             Console.WriteLine("The enemy's attack has failed! Your dodge was succesful.");
                             enemyenergy += turnrecharge;
                             eturnsuccess = true;
+                            break;
                         }
                     }
                     if (chance < passattack && playerchoice != dodge)
@@ -396,6 +400,7 @@ internal class Program
                         playerhealth -= damage;
                         enemyenergy += turnrecharge;
                         eturnsuccess = true;
+                        break;
                     }
                     else if (chance <= 10 && playerchoice == recharge)
                     {
@@ -404,12 +409,14 @@ internal class Program
                         playerhealth -= damage;
                         enemyenergy += turnrecharge;
                         eturnsuccess = true;
+                        break;
                     }
                     else
                     {
                         Console.WriteLine("The enemy's attack has failed!");
                         enemyenergy += turnrecharge;
                         eturnsuccess = true;
+                        break;
                     }
                 }
 
@@ -427,12 +434,14 @@ internal class Program
                             playerhealth -= damage;
                             enemyenergy += turnrecharge;
                             eturnsuccess = true;
+                            break;
                         }
                         else
                         {
                             Console.WriteLine("The enemy's attack has failed! Your dodge was successful.");
                             enemyenergy += turnrecharge;
                             eturnsuccess = true;
+                            break;
                         }
                     }
                     if (chance < passspecialattack && playerchoice != dodge)
@@ -442,6 +451,7 @@ internal class Program
                         playerhealth -= damage;
                         enemyenergy += turnrecharge;
                         eturnsuccess = true;
+                        break;
                     }
                     else if (chance <= 7 && playerchoice == recharge)
                     {
@@ -450,12 +460,14 @@ internal class Program
                         playerhealth -= damage;
                         enemyenergy += turnrecharge;
                         eturnsuccess = true;
+                        break;
                     }
                     else
                     {
                         Console.WriteLine("The enemy's attack has failed.");
                         enemyenergy += turnrecharge;
                         eturnsuccess = true;
+                        break;
                     }
 
                 }
@@ -557,4 +569,3 @@ internal class Program
         }
     }
 }
-
