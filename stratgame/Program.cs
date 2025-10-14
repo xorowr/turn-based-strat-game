@@ -1,4 +1,5 @@
 
+
 using System.Diagnostics;
 using System.Security.Authentication;
 
@@ -47,13 +48,16 @@ internal class Program
 
         const int healththresh = 99;
         const int energythresh = 49;
+
         const int passdodgeattack = 6;
         const int passattack = 9;
-        const int turnrecharge = 4;
         const int passspecialattack = 6;
         const int passspecialdodgeattack = 3;
         const int passrechargeattack = 10;
         const int passrechargespecialattack = 7;
+
+
+        const int turnrecharge = 4;
         const int energycheck = 9;
         const int maxhealth = 100;
         const int maxenergy = 50;
@@ -100,7 +104,7 @@ internal class Program
         Random roll = new Random();
 
 
-        while (playerhealth > 0 && enemyhealth !> 0 || playerhealth !> 0 && enemyhealth > 0)
+        while (playerhealth > 0 && enemyhealth! > 0 || playerhealth! > 0 && enemyhealth > 0)
         {
             choices();
             string playerchoice = Console.ReadLine();
@@ -149,7 +153,7 @@ internal class Program
                         playerenergy += turnrecharge;
                         pturnsuccess = true;
                     }
-                    else if (chance !<= passrechargeattack && enemychoice == recharge)
+                    else if (chance! <= passrechargeattack && enemychoice == recharge)
                     {
                         Console.WriteLine("Your attack has failed!");
                         playerenergy += turnrecharge;
@@ -158,7 +162,7 @@ internal class Program
                 }
                 else if (playerchoice == attack && playerenergy <= minenergyneed)
                 {
-                    Console.WriteLine("You do not have enough energy for this move. Pick a new move");
+                    Console.WriteLine("You do not have enough energy for this move. Pick a new move TEST 1");
                     choices();
                     playerchoice = Console.ReadLine();
                     pturnsuccess = false;
@@ -204,7 +208,7 @@ internal class Program
                         playerenergy += turnrecharge;
                         pturnsuccess = true;
                     }
-                    else if (chance !<= passrechargespecialattack && enemychoice == recharge)
+                    else if (chance! <= passrechargespecialattack && enemychoice == recharge)
                     {
                         Console.WriteLine("Your attack has failed.");
                         playerenergy += turnrecharge;
@@ -214,7 +218,7 @@ internal class Program
                 }
                 else if (playerchoice == specialattack && playerenergy <= energycheck)
                 {
-                    Console.WriteLine("You do not have enough energy for this move. Pick a new move");
+                    Console.WriteLine("You do not have enough energy for this move. Pick a new move TEST2");
                     choices();
                     playerchoice = Console.ReadLine();
                     pturnsuccess = false;
@@ -288,6 +292,12 @@ internal class Program
                         Console.WriteLine("You can now pick to do another move. It cannot be another heal");
                         ChoicesNoHeal();
                         playerchoice = Console.ReadLine();
+                        while (playerchoice == heal)
+                        {
+                            Console.WriteLine("You cannot pick heal again. Please select a new action");
+                            ChoicesNoHeal();
+                            playerchoice = Console.ReadLine();
+                        }
                         pturnsuccess = false;
 
                     }
@@ -365,7 +375,7 @@ internal class Program
                     {
                         int damage = roll.Next(minattackdamage, maxattackdamage);
                         Console.WriteLine("The enemy's attack was successful. They dealt " + damage + " damage");
-                        enemyhealth -= damage;
+                        playerhealth -= damage;
                         playerenergy += turnrecharge;
                         eturnsuccess = true;
                     }
@@ -514,7 +524,7 @@ internal class Program
 
         }
         Console.WriteLine("Game over!");
-        if (playerhealth <=0)
+        if (playerhealth <= 0)
         {
             Console.WriteLine("The enemy has won. You lose.");
         }
